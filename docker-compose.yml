@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:8080"
+    depends_on:
+      - mongo
+    command: npm run start:dev
+  mongo:
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
