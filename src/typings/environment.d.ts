@@ -4,6 +4,8 @@ declare global {
             NODE_ENV: 'development' | 'production';
             PORT: string;
             HOST: string;
+            MONGO_URL: string;
+            BASE_URL: string;
         }
     }
 }

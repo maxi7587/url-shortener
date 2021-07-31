@@ -7,7 +7,7 @@ services:
     container_name: web
     restart: unless-stopped
     volumes:
-      - ./:/app
+      - ./src/:/app/src
     ports:
       - "3000:8080"
     depends_on:
