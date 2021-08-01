@@ -1,12 +1,16 @@
-import Express, { Request, Response } from "express";
+import Express from "express";
+import { ApiController } from "../controllers/api-controller";
+import { Container } from "typedi";
 
 export const router = Express.Router();
 
+const apiController = Container.get(ApiController);
+
 // POST /api/encode
-router.post('/encode', (req: Request, res: Response) => res.send('Implement me!'));
+router.post('/encode', apiController.encode);
 // GET /api/decode
-router.get('/decode', (req: Request, res: Response) => res.send('Implement me!'));
+router.get('/decode', apiController.decode);
 // GET /api/statistic/{url_path}
-router.get('/statistic/:urlPath', (req: Request, res: Response) => res.send('Implement me!'));
+router.get('/statistic/:urlPath', apiController.getStatistics);
 // GET /api/list
-router.get('/list', (req: Request, res: Response) => res.send('Implement me!'));
+router.get('/list', apiController.list);
