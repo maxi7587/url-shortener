@@ -19,6 +19,15 @@ export class UrlService {
         }
     }
 
+    public async all(limit: number, offset: number) {
+        try {
+            return this.urlRepository.getAll(limit, offset);
+        } catch (err) {
+            console.error('[UrlService][get] Error trying to get all URLs.');
+            throw err;
+        }
+    }
+
     public async create(originalUrl: string): Promise<Url> {
         const base = process.env.BASE_URL;
 

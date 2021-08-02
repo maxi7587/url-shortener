@@ -78,7 +78,23 @@ export class ApiController{
         }
     }
 
-    public async list(req: Request, res: Response) {
-        console.error('Implement me!');
+    public async list(req: Request<null, any, any, {limit: number, offset: number}>, res: Response) {
+        const { limit, offset } = {...{limit: 10, offset: 0}, ...req.query};
+
+        if (typeof limit !== "number" || typeof offset !== "number") {
+            const msg = 'Invalid query params: limit and offset must be numbers.';
+            console.info(`[ApiController][list] ${msg}`);
+            return res.status(400).json({msg})
+        }
+
+        try {
+            const url = await this.urlService.all(limit, offset);
+            return res.send(url);
+        } catch (err) {
+            const msg = 'Unexpected error getting URLs list.';
+            console.error(`[ApiController][list] ${msg}`);
+            console.info(err);
+            res.status(500).send({msg});
+        }
     }
 }
