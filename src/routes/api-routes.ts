@@ -1,6 +1,6 @@
-import Express from "express";
-import { ApiController } from "../controllers/api-controller";
-import { Container } from "typedi";
+import Express from 'express';
+import { ApiController } from '../controllers/api-controller';
+import { Container } from 'typedi';
 
 export const router = Express.Router();
 

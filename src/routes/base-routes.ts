@@ -1,6 +1,6 @@
-import Express from "express";
-import { BaseController } from "../controllers/base-controller";
-import { Container } from "typedi";
+import Express from 'express';
+import { BaseController } from '../controllers/base-controller';
+import { Container } from 'typedi';
 
 export const router = Express.Router();
 
