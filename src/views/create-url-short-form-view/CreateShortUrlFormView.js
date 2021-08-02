@@ -1,5 +1,6 @@
 import React from 'react';
-import { UrlShortenerService } from "../services/UrlShortenerService";
+import { UrlShortenerService } from "../../services/UrlShortenerService";
+import {OriginalUrlFormComponent} from "../../components/OriginalUrlFormComponent";
 
 export class CreateShortUrlFormView extends React.Component {
     constructor(props) {
@@ -14,12 +15,10 @@ export class CreateShortUrlFormView extends React.Component {
         this.setState({originalUrl: event.target.value});
     }
 
-    async handleSubmit(event) {
+    async handleSubmit(event, originalUrl) {
         event.preventDefault();
-        UrlShortenerService.generateShortUrl(this.state.originalUrl).then(
+        UrlShortenerService.generateShortUrl(originalUrl).then(
             shortUrlData => {
-                console.log('shortUrlData');
-                console.log(shortUrlData);
                 this.setState({shortUrl: shortUrlData.short_url});
             }
         ).catch(
@@ -31,26 +30,23 @@ export class CreateShortUrlFormView extends React.Component {
     }
 
     render() {
-        const { shortUrl, originalUrl } = this.state;
+        const { shortUrl } = this.state;
         return (
-            <>
+            <div className={'container'}>
                 <h2>Generate short URL</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Original Url:
-                        <input type="text" value={originalUrl} onChange={this.handleChange} />
-                    </label>
-                    <input disabled={!originalUrl} type="button" onClick={this.handleSubmit} value={"Generate!"}/>
-                </form>
+                <p>Hint: your URL must start with <b>http://</b> or <b>https://</b>.</p>
+                <OriginalUrlFormComponent submitButtonText={'Generate!'} onSubmit={this.handleSubmit}/>
                 {
                     shortUrl && <>
                         <h3>Your short URL is:</h3>
-                        <p>
-                            {shortUrl}
-                        </p>
+                        <a href={shortUrl} target={'_blank'}>
+                            <code>
+                                {shortUrl}
+                            </code>
+                        </a>
                     </>
                 }
-            </>
+            </div>
         );
     }
 }

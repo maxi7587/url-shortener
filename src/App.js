@@ -5,7 +5,8 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import { CreateShortUrlFormView } from "./views/CreateShortUrlFormView";
+import { CreateShortUrlFormView } from "./views/create-url-short-form-view/CreateShortUrlFormView";
+import {UrlListView} from "./views/url-list-view/UrlListView";
 
 function App() {
   return (
@@ -13,10 +14,10 @@ function App() {
         <div>
           <ul className={'app-header'}>
             <li>
-              <Link className={'app-link'} to="/">Home</Link>
+              <Link className={'app-link'} to="/">Generate URL</Link>
             </li>
             <li>
-              <Link className={'app-link'} to="/list">About</Link>
+              <Link className={'app-link'} to="/list">URL List</Link>
             </li>
           </ul>
 
@@ -26,7 +27,8 @@ function App() {
             <Route exact path="/">
               <CreateShortUrlFormView />
             </Route>
-              <Route path="/list">
+            <Route path="/list">
+              <UrlListView />
             </Route>
           </Switch>
         </div>
