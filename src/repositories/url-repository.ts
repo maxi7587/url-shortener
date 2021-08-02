@@ -4,6 +4,15 @@ import { FilterQuery, UpdateQuery } from 'mongoose';
 
 @Service()
 export class UrlRepository {
+    public async get(urlPath: string) {
+        try {
+            return UrlModel.findOne({urlPath});
+        } catch (err) {
+            console.error(`[UrlRepository][get] Error getting URL with urlPath: ${urlPath}`);
+            throw err;
+        }
+    }
+
     public async findOne(filter: FilterQuery<Url>): Promise<Url|null> {
         try {
             return UrlModel.findOne(filter);

@@ -41,7 +41,7 @@ describe('POST /api/encode', () => {
             await mongoServer.stop();
             await server.close();
         } catch (error) {
-            console.log(`error trying to disconnect from DB, stop DB server and stop Server ${error}`);
+            console.log(`Error trying to disconnect from DB, stop DB server and stop Server ${error}`);
             throw error;
         }
     });

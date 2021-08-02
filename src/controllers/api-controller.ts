@@ -19,7 +19,7 @@ export class ApiController{
         if(!originalUrl) {
             const msg = 'Bad request: original_url must be included in body.';
             console.info(`[ApiController][encode] ${msg}`);
-            res.status(400).send(msg);
+            res.status(400).json(msg);
         }
 
         try {
@@ -30,14 +30,32 @@ export class ApiController{
 
             return res.status(responseCode).json({short_url: url.shortUrl}).send();
         } catch (err) {
-            console.error('[ApiController][encode] Unexpected error encoding URL.');
+            const msg = 'Unexpected error encoding URL.';
+            console.error(`[ApiController][encode] ${msg}`);
             console.info(err);
-            res.status(500).send(err);
+            res.status(500).json({msg});
         }
     }
 
     public async decode(req: Request, res: Response) {
-        console.error('Implement me!');
+        const { url_path: urlPath } = req.query;
+
+        if (typeof urlPath !== 'string') {
+            const msg = 'Bad request: Missing query parameter "url_path".';
+            console.info(`[ApiController][decode] ${msg}`);
+            return res.status(400).json({msg});
+        }
+
+        try {
+            const url = await this.urlService.get(urlPath);
+            await this.urlService.increaseDecodeCount(urlPath);
+            return res.send(url);
+        } catch (err) {
+            const msg = '[ApiController][decode] Unexpected error decoding URL.';
+            console.error(msg);
+            console.info(err);
+            return res.status(500).json({msg});
+        }
     }
 
     public async getStatistics(req: Request, res: Response) {

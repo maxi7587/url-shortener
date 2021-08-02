@@ -10,6 +10,15 @@ export class UrlService {
         private readonly urlRepository: UrlRepository
     ) {}
 
+    public async get(urlPath: string) {
+        try {
+            return this.urlRepository.get(urlPath);
+        } catch (err) {
+            console.error(`[UrlService][get] Error trying to get URL from urlPath "${urlPath}".`);
+            throw err;
+        }
+    }
+
     public async create(originalUrl: string): Promise<Url> {
         const base = process.env.BASE_URL;
 
