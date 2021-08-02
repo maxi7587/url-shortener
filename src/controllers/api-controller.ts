@@ -59,7 +59,23 @@ export class ApiController{
     }
 
     public async getStatistics(req: Request, res: Response) {
-        console.error('Implement me!');
+        const { urlPath } = req.params;
+
+        if(!urlPath) {
+            const msg = 'Bad request: missing required param "urlPath"';
+            console.info(`[ApiController][list] ${msg}`);
+            res.status(400).json({msg});
+        }
+
+        try {
+            const url = await this.urlService.get(urlPath);
+            return res.send(url);
+        } catch (err) {
+            const msg = `Unexpected error getting statistics for url path "${urlPath}"`;
+            console.error(`[ApiController][getStatistics] ${msg}`);
+            console.info(err);
+            res.status(500).json({msg});
+        }
     }
 
     public async list(req: Request, res: Response) {
