@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { Service } from 'typedi';
 import { UrlService } from '../services/url-service';
-import {ApiError} from "../errors/api-error";
 
 @Service()
 export class ApiController{
@@ -20,7 +19,7 @@ export class ApiController{
         if(!originalUrl) {
             const msg = 'Bad request: original_url must be included in body.';
             console.info(`[ApiController][encode] ${msg}`);
-            res.status(400).json(msg);
+            return res.status(400).json(msg);
         }
 
         try {
@@ -31,8 +30,8 @@ export class ApiController{
 
             return res.status(responseCode).json({short_url: url.shortUrl}).send();
         } catch (err) {
-            let msg: string = 'Unexpected error encoding URL.';
-            let code: number = 500;
+            let msg = 'Unexpected error encoding URL.';
+            let code = 500;
             if (err.name === 'api-error') {
                 msg = err.message;
                 code = err.code;
@@ -57,8 +56,8 @@ export class ApiController{
             await this.urlService.increaseDecodeCount(urlPath);
             return res.send(url);
         } catch (err) {
-            let msg: string = '[ApiController][decode] Unexpected error decoding URL.';
-            let code: number = 500;
+            let msg = '[ApiController][decode] Unexpected error decoding URL.';
+            let code = 500;
             if (err.name === 'api-error') {
                 msg = err.message;
                 code = err.code;
@@ -82,8 +81,8 @@ export class ApiController{
             const url = await this.urlService.get(urlPath);
             return res.send(url);
         } catch (err) {
-            let msg: string = `Unexpected error getting statistics for url path "${urlPath}"`;
-            let code: number = 500;
+            let msg = `Unexpected error getting statistics for url path "${urlPath}"`;
+            let code = 500;
             if (err.name === 'api-error') {
                 msg = err.message;
                 code = err.code;
@@ -94,8 +93,8 @@ export class ApiController{
         }
     }
 
-    public async list(req: Request<null, any, any, {limit: number, offset: number}>, res: Response) {
-        const { limit, offset } = {...{limit: 10, offset: 0}, ...req.query};
+    public async list(req: Request<null, any, any, {limit: number, offset: number, original_url: string}>, res: Response) {
+        const { original_url: originalUrlSubString, limit, offset } = {...{limit: 10, offset: 0, original_url: ''}, ...req.query};
 
         if (typeof limit !== "number" || typeof offset !== "number") {
             const msg = 'Invalid query params: limit and offset must be numbers.';
@@ -104,11 +103,11 @@ export class ApiController{
         }
 
         try {
-            const url = await this.urlService.all(limit, offset);
+            const url = await this.urlService.find(originalUrlSubString, limit, offset);
             return res.send(url);
         } catch (err) {
-            let msg: string = 'Unexpected error getting URLs list.';
-            let code: number = 500;
+            let msg = 'Unexpected error getting URLs list.';
+            let code = 500;
             if (err.name === 'api-error') {
                 msg = err.message;
                 code = err.code;

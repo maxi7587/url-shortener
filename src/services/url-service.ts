@@ -4,6 +4,7 @@ import { Service } from 'typedi';
 import { UrlRepository } from '../repositories/url-repository';
 import { Url } from '../models/url-model';
 import {ApiError} from "../errors/api-error";
+import { FilterQuery } from 'mongoose';
 
 @Service()
 export class UrlService {
@@ -20,9 +21,11 @@ export class UrlService {
         }
     }
 
-    public async all(limit: number, offset: number) {
+    public async find(originalUrlSubString: string , limit: number, offset: number) {
         try {
-            return this.urlRepository.getAll(limit, offset);
+            // todo: formatting the filter query should be done in url-repository and provide an abstraction,
+            // but it was implemented here due to time issues
+            return this.urlRepository.find({originalUrl: {$regex: originalUrlSubString, $options:"i"}}, limit, offset);
         } catch (err) {
             console.error('[UrlService][get] Error trying to get all URLs.');
             throw err;

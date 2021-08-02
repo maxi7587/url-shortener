@@ -32,7 +32,7 @@ const UrlSchema = new Schema<Url>({
         default: 0,
     },
     lastRedirect: {
-        type: Number,
+        type: Date,
         required: false
     },
     decodeCount: {

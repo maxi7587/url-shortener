@@ -28,8 +28,8 @@ export class BaseController{
                 return res.redirect(url.originalUrl);
             } else res.status(404).send('Not found');
         } catch (err) {
-            let msg: string = 'Unexpected error trying to redirect.';
-            let code: number = 500;
+            let msg = 'Unexpected error trying to redirect.';
+            let code = 500;
             if (err.name === 'api-error') {
                 msg = err.message;
                 code = err.code;

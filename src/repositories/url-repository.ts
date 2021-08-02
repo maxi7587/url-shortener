@@ -22,6 +22,15 @@ export class UrlRepository {
         }
     }
 
+    public async find(filter: FilterQuery<Url>,limit: number, offset: number) {
+        try {
+            return UrlModel.find(filter).limit(limit).skip(offset);
+        } catch (err) {
+            console.error('[UrlRepository][getAll] Error getting all URLs.');
+            throw err;
+        }
+    }
+
     public async findOne(filter: FilterQuery<Url>): Promise<Url|null> {
         try {
             return UrlModel.findOne(filter);
