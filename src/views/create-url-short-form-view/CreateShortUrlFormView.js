@@ -39,7 +39,7 @@ export class CreateShortUrlFormView extends React.Component {
                 {
                     shortUrl && <>
                         <h3>Your short URL is:</h3>
-                        <a href={shortUrl} target={'_blank'}>
+                        <a href={shortUrl} target={'_blank'} rel={'noreferrer'}>
                             <code>
                                 {shortUrl}
                             </code>

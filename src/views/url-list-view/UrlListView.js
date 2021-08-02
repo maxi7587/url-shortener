@@ -80,7 +80,7 @@ export class UrlListView extends React.Component {
                                 {
                                     this.shortUrlProperties.map(shortUrlProperty =>
                                         <td key={shortUrl.urlPath + shortUrlProperty}>
-                                            <p>{ shortUrl[shortUrlProperty] }</p>
+                                            <p>{ shortUrl[shortUrlProperty] || '-' }</p>
                                         </td>)
                                 }
                             </tr>
