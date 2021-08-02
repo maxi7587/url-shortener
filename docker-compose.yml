@@ -9,7 +9,7 @@ services:
     volumes:
       - ./src/:/app/src
     ports:
-      - "3000:8080"
+      - "8080:8080"
     depends_on:
       - mongo
     command: npm run start:dev

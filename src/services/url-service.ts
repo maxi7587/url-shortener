@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { Service } from 'typedi';
 import { UrlRepository } from '../repositories/url-repository';
 import { Url } from '../models/url-model';
+import {ApiError} from "../errors/api-error";
 
 @Service()
 export class UrlService {
@@ -33,7 +34,7 @@ export class UrlService {
 
         if (!isUri(originalUrl)) {
             console.info('[UrlService][create] Bad request: invalid original URL')
-            throw new Error(`Invalid original URL: "${originalUrl}".`);
+            throw new ApiError(400, `Invalid original URL: "${originalUrl}".`);
         }
 
         try {

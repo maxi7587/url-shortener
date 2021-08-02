@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Service } from 'typedi';
 import { UrlService } from '../services/url-service';
+import {ApiError} from "../errors/api-error";
 
 @Service()
 export class BaseController{
@@ -27,9 +28,15 @@ export class BaseController{
                 return res.redirect(url.originalUrl);
             } else res.status(404).send('Not found');
         } catch (err) {
-            console.error('[BaseController][redirect] Unexpected error trying to redirect.');
+            let msg: string = 'Unexpected error trying to redirect.';
+            let code: number = 500;
+            if (err.name === 'api-error') {
+                msg = err.message;
+                code = err.code;
+            }
+            console.error(`[BaseController][redirect] ${msg}`);
             console.info(err);
-            res.status(500).send('Internal Server Error');
+            res.status(code).send(msg);
         }
     }
 }

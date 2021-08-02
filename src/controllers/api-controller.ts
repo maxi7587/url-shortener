@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Service } from 'typedi';
 import { UrlService } from '../services/url-service';
+import {ApiError} from "../errors/api-error";
 
 @Service()
 export class ApiController{
@@ -30,10 +31,15 @@ export class ApiController{
 
             return res.status(responseCode).json({short_url: url.shortUrl}).send();
         } catch (err) {
-            const msg = 'Unexpected error encoding URL.';
+            let msg: string = 'Unexpected error encoding URL.';
+            let code: number = 500;
+            if (err.name === 'api-error') {
+                msg = err.message;
+                code = err.code;
+            }
             console.error(`[ApiController][encode] ${msg}`);
             console.info(err);
-            res.status(500).json({msg});
+            res.status(code).json({msg});
         }
     }
 
@@ -51,10 +57,15 @@ export class ApiController{
             await this.urlService.increaseDecodeCount(urlPath);
             return res.send(url);
         } catch (err) {
-            const msg = '[ApiController][decode] Unexpected error decoding URL.';
+            let msg: string = '[ApiController][decode] Unexpected error decoding URL.';
+            let code: number = 500;
+            if (err.name === 'api-error') {
+                msg = err.message;
+                code = err.code;
+            }
             console.error(msg);
             console.info(err);
-            return res.status(500).json({msg});
+            return res.status(code).json({msg});
         }
     }
 
@@ -71,10 +82,15 @@ export class ApiController{
             const url = await this.urlService.get(urlPath);
             return res.send(url);
         } catch (err) {
-            const msg = `Unexpected error getting statistics for url path "${urlPath}"`;
+            let msg: string = `Unexpected error getting statistics for url path "${urlPath}"`;
+            let code: number = 500;
+            if (err.name === 'api-error') {
+                msg = err.message;
+                code = err.code;
+            }
             console.error(`[ApiController][getStatistics] ${msg}`);
             console.info(err);
-            res.status(500).json({msg});
+            res.status(code).json({msg});
         }
     }
 
@@ -91,10 +107,15 @@ export class ApiController{
             const url = await this.urlService.all(limit, offset);
             return res.send(url);
         } catch (err) {
-            const msg = 'Unexpected error getting URLs list.';
+            let msg: string = 'Unexpected error getting URLs list.';
+            let code: number = 500;
+            if (err.name === 'api-error') {
+                msg = err.message;
+                code = err.code;
+            }
             console.error(`[ApiController][list] ${msg}`);
             console.info(err);
-            res.status(500).send({msg});
+            res.status(code).send({msg});
         }
     }
 }

@@ -1,5 +1,6 @@
 import express, { Express } from 'express';
 import compression from 'compression';
+import cors from 'cors';
 import { connectToDB } from './loaders/database';
 import 'reflect-metadata';
 import { router as apiRoutes } from './routes/api-routes';
@@ -21,6 +22,9 @@ export async function startServer(host: string, port: number, mongoUrl: string):
 
     // Compression
     app.use(compression());
+
+    // CORS
+    app.use(cors());
 
     // Body Parser
     app.use(express.urlencoded({ extended: true }));
