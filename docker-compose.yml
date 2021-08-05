@@ -1,13 +1,26 @@
 version: '3'
 services:
-  web:
+  frontend:
     build:
-      context: .
+      context: ./url-shortener-frontend
       dockerfile: Dockerfile
-    container_name: web
+    container_name: url-shortener-frontend
     restart: unless-stopped
     volumes:
-      - ./src/:/app/src
+      - ./url-shortener-frontend/src/:/app/src
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    command: npm run start
+  backend:
+    build:
+      context: ./url-shortener-backend
+      dockerfile: Dockerfile
+    container_name: url-shortener-backend
+    restart: unless-stopped
+    volumes:
+      - ./url-shortener-backend/src/:/app/src
     ports:
       - "8080:8080"
     depends_on:
